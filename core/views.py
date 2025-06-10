@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def smth(request):
+    return render(request,'base.html', context={'hello': 'hello'})
