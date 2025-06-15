@@ -1,0 +1,35 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Task Tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {% tailwind_css %}
+    </head>
+    <body class='bg-gray-600'>
+		<nav class="top-bars w-auto h-12 flex py-3 px-7 rounded">
+		    <img src="{% static 'jira_icon.jpeg' %}" width='25' alt='jira_icon'>
+            <span class='logo mx-3 text-bold'>Jira</span>
+            <form method="POST" action="." class='form flex ml-30'>
+                {% csrf_token %}
+                <input name="poisk" placeholder='Поиск' class='poisk w-96 h-7 px-2 ml-30 rounded border border-black border-solid bg-white'>
+                <button class='bg-blue-500 rounded w-25 h-7 text-[15px] text-white'>+ Создать</button>
+            </form>
+            {% if user.is_authenticated %}
+                <span class='username ml-80 border'>{{user.username}} dfglndrg</span>
+                <button type="submit" class='btn  w-20 h-7 text-[15px] rounded mx-20 border border-black border-solid bg-purple-900 text-white'>Log out</button>
+            {% else %}
+                <button type="submit" class='btn w-20 h-7 text-[10px] rounded mx-30 border border-black border-solid'>Register</button>
+                <button type="submit" class='btn'>Log in</button>
+            {% endif %}
+
+		</nav>
+        <hr>
+
+        <div class='sidenav w-2xl h-auto border border-black border-solid pl-4 pt-5'>
+            <span>Планы</span>
+        </div>
+	</body>
+</html>
