@@ -5,5 +5,5 @@ from core import views
 
 app_name = 'core'
 urlpatterns = [
-    path('abc/', views.smth)
+    path('', views.smth),
 ]

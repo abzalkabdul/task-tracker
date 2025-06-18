@@ -1,5 +1,48 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
+
+from .models import Task
+
+from .forms import CreateUserForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+from django.contrib.auth import login, logout
+
+def register(request):
+    form = CreateUserForm() # for GET request
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, f'Account {user} is created!')
+            return redirect('login')
+    return render(request, 'registration.html', {'form': form})
+
+
+def login_page(request):
+    form = AuthenticationForm()
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.get_user()
+            login(request, user)
+            return redirect('smth')
+        else:
+            messages.error(request, 'Invalid username or password')
+
+    return render(request, 'login.html', {'form': form})
+
+def logout_page(request):
+    logout(request)
+    return redirect('login')
+
 
 def smth(request):
-    return render(request, 'base.html', {})
+    tasks = Task.objects.all()
+    return render(request, 'base.html', {"tasks": tasks})
+
 
