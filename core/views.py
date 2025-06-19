@@ -11,7 +11,7 @@ from django.contrib.auth import login, logout
 def register(request):
     form = CreateUserForm() # for GET request
 
-    if request.method == 'POST':
+    if request.POST.get('action') == 'register':
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
@@ -24,24 +24,24 @@ def register(request):
 def login_page(request):
     form = AuthenticationForm()
 
-    if request.method == 'POST':
+    if request.POST.get('action') == 'login':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            form.save()
             user = form.get_user()
             login(request, user)
-            return redirect('smth')
+            return redirect('core:base')
         else:
             messages.error(request, 'Invalid username or password')
 
     return render(request, 'login.html', {'form': form})
 
 def logout_page(request):
-    logout(request)
-    return redirect('login')
+    if request.POST.get('action') == 'logout':
+        logout(request)
+        return redirect('core')
 
 
-def smth(request):
+def base(request):
     tasks = Task.objects.all()
     return render(request, 'base.html', {"tasks": tasks})
 

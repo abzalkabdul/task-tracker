@@ -1,23 +1,29 @@
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jira Login</title>
+    {% tailwind_css %}
 </head>
-<body class="h-screen flex items-center justify-center bg-gray-800">
-    <form method="POST" action='.' class='shadow-md '>
-    {% csrf_token %}
-        <h2>Authorization</h2>
-        {% for f in form %}
-            <label for="{{f.id_for_label}}">{{f.label}}:</label>
-            {{f}}
-        {% endfor %}
-        {% for message in messages %}
-            <span style="color: #FF0000;">{{message}}</span>
-        {% endfor %}
-        <button type="submit" class='bg-blue-400 text-white font-bold w-40 h-20'>Log in</button>
 
+<body class="h-screen flex flex-wrap items-center justify-center bg-gray-800">
+    <form method="POST" action='.'>
+        {% csrf_token %}
+        <div class="flex flex-wrap items-center justify-center w-[450px] h-[400px] bg-white">
+            <img src="{% static 'jira_icon.jpeg'%}" width='40' class='ml-[150px] mr-3'>
+            <h2 class="font-bold text-2xl mr-48">Jira</h2>
+            {% for f in form %}
+                <label for="{{f.id_for_label}}" class="text-1xl text-shadow-gray-700 font-mono ml-[40px] font-bold">{{f.label}}:</label>
+                <span class="w-[200px] h-7 rounded border border-solid ml-[5px] mr-[40px]">{{f}}</span>
+            {% endfor %}
+            {% for message in messages %}
+                <span class="text-red-600 mx-[100px]">{{message}}</span>
+            {% endfor %}
+            <a href="" class="text-blue-600 underline hover:text-blue-800 ml-12">Forgot password ?</a>
+            <button type="submit" class='bg-blue-700 text-white font-bold w-20 h-13 rounded mx-15'>Log in</button>
+        </div>
     </form>
 </body>
 </html>

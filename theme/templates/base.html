@@ -17,17 +17,17 @@
                 {% csrf_token %}
                 <input name="poisk" placeholder='Поиск' class='w-[600px] h-7 px-4 ml-30 rounded border border-b-neutral-300 border-solid bg-transparent'>
                 <button class='bg-blue-500 rounded w-25 h-7 text-[15px] ml-4 text-white'>+ Создать</button>
-            </form>
 
-            <div class="flex ml-auto items-center">
-                {% if user.is_authenticated %}
-                    <span class='text-white mr-8'>{{ user.username }}</span>
-                    <button type="submit" class='w-20 h-7 text-[15px] rounded border border-black bg-purple-900 text-white'>Log out</button>
-                {% else %}
-                    <button type="submit" class='w-20 h-7 text-[10px] rounded border border-black mr-2'>Register</button>
-                    <button type="submit" class='btn'>Log in</button>
-                {% endif %}
-            </div>
+                <div class="flex ml-auto items-center">
+                    {% if user.is_authenticated %}
+                        <span class='text-white mr-8'>{{ user.username }}</span>
+                        <button type="submit" class='w-20 h-7 text-[15px] rounded border border-black bg-purple-900 text-white' action="logout">Log out</button>
+                    {% else %}
+                        <button type="submit" action="register" class='w-20 h-7 text-[10px] rounded border border-black mr-2'>Register</button>
+                        <button type="submit" action="login" class='btn'>Log in</button>
+                    {% endif %}
+                </div>
+            </form>
 
 		</nav>
         <hr>
