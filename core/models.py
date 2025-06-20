@@ -1,7 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Project(models.Model):
+    name = models.CharField(max_length=50)
+    bg_image = models.ImageField(upload_to="backgrounds/", blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            count = Project.objects.count() + 1
+            self.name = f"Project{count}"
+        super().save(*args, **kwargs)
+
 class Taskgroup(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

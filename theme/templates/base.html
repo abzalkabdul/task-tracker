@@ -15,13 +15,15 @@
 
             <form method="POST" action="." class='form flex ml-30'>
                 {% csrf_token %}
-                <input name="poisk" placeholder='Поиск' class='w-[600px] h-7 px-4 ml-30 rounded border border-b-neutral-300 border-solid bg-transparent'>
+                <input name="poisk" placeholder='Поиск' class='w-[800px] h-7 px-4 ml-10 border-blue-500 rounded border border-solid text-gray-200 bg-transparent'>
                 <button class='bg-blue-500 rounded w-25 h-7 text-[15px] ml-4 text-white'>+ Создать</button>
 
                 <div class="flex ml-auto items-center">
                     {% if user.is_authenticated %}
-                        <span class='text-white mr-8'>{{ user.username }}</span>
-                        <button type="submit" class='w-20 h-7 text-[15px] rounded border border-black bg-purple-900 text-white' action="logout">Log out</button>
+                        <span class='text-white ml-12 whitespace-nowrap'>
+                            👤 {{ user.username }}
+                        </span>
+                        <button type="submit" action="logout" class='w-20 h-7 text-[15px] ml-9 rounded border border-black bg-purple-900 text-white'>Log out</button>
                     {% else %}
                         <button type="submit" action="register" class='w-20 h-7 text-[10px] rounded border border-black mr-2'>Register</button>
                         <button type="submit" action="login" class='btn'>Log in</button>
@@ -31,6 +33,21 @@
 
 		</nav>
         <hr>
+
+        <nav class="ml-[150px] mt-[40px] w-[200px] h-[500px] border border-gray-800 rounded-2xl bg-gray-700">
+            <h4 class="pl-[40px] pt-[40px] text-1xl font-sans text-blue-500">Планы</h4>
+            <hr class='mx-3 my-2'>
+            {% if tasks != None %}
+                <div class="inline-flex items-center gap-2 text-gray-400 rounded border border-blue-500 ml-7 my-3 px-3 ">
+                    <img src="{% static 'project-management.png' %}" width="20"> 
+                    {{ first_project }}
+                </div>
+                <div class="inline-flex items-center gap-2 text-gray-400 rounded border border-blue-500 ml-7 my-3 px-3 ">. . .</div>
+            {% endif %}
+            
+            <hr class='mx-3 my-2 bg-gray-600'>
+            <h4 class="pl-[40px] pt-[20px] text-1xl font-sans text-blue-500">Участники</h4>
+        </nav>
 
         {% block content %}
         {% endblock %}

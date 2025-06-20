@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from .models import Task
+from .models import Task, Taskgroup
 
 from .forms import CreateUserForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -11,13 +11,15 @@ from django.contrib.auth import login, logout
 def register(request):
     form = CreateUserForm() # for GET request
 
-    if request.POST.get('action') == 'register':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request, f'Account {user} is created!')
-            return redirect('login')
+    if request.method == 'POST':
+        action = request.POST.get("action")
+        if  action == 'register':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                user = form.cleaned_data.get('username')
+                messages.success(request, f'Account {user} is created!')
+                return redirect('login')
     return render(request, 'registration.html', {'form': form})
 
 
@@ -36,13 +38,15 @@ def login_page(request):
     return render(request, 'login.html', {'form': form})
 
 def logout_page(request):
-    if request.POST.get('action') == 'logout':
+    if request.POST.get("action") == 'logout':
         logout(request)
         return redirect('core')
 
 
 def base(request):
     tasks = Task.objects.all()
-    return render(request, 'base.html', {"tasks": tasks})
+    first_project = Taskgroup.objects.first().project_name
+    return render(request, 'base.html', {"tasks": tasks,
+                                         "first_project": first_project,})
 
 
