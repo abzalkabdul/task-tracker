@@ -8,48 +8,58 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         {% tailwind_css %}
     </head>
-    <body class='bg-gray-600'>
-		<nav class="top-bars w-auto h-12 flex py-3 px-7 rounded">
-		    <img src="{% static 'jira_icon.jpeg' %}" width='25' alt='jira_icon'>
+    <body class='bg-gray-800'>
+        <nav class="top-bars w-auto h-12 flex py-3 px-7 rounded ">
+            <img src="{% static 'jira_icon.jpeg' %}" width='25' alt='jira_icon'>
             <span class='logo mx-3 text-bold text-white'>Jira</span>
-
+            
             <form method="POST" action="." class='form flex ml-30'>
                 {% csrf_token %}
                 <input name="poisk" placeholder='Поиск' class='w-[800px] h-7 px-4 ml-10 border-blue-500 rounded border border-solid text-gray-200 bg-transparent'>
                 <button class='bg-blue-500 rounded w-25 h-7 text-[15px] ml-4 text-white'>+ Создать</button>
-
+                
                 <div class="flex ml-auto items-center">
                     {% if user.is_authenticated %}
-                        <span class='text-white ml-12 whitespace-nowrap'>
-                            👤 {{ user.username }}
-                        </span>
-                        <button type="submit" action="logout" class='w-20 h-7 text-[15px] ml-9 rounded border border-black bg-purple-900 text-white'>Log out</button>
+                    <span class='text-white ml-12 whitespace-nowrap'>
+                        👤 {{ user.username }}
+                    </span>
+                    <button type="submit" action="logout" class='w-20 h-7 text-[15px] ml-9 rounded border border-black bg-purple-900 text-white'>Log out</button>
                     {% else %}
-                        <button type="submit" action="register" class='w-20 h-7 text-[10px] rounded border border-black mr-2'>Register</button>
-                        <button type="submit" action="login" class='btn'>Log in</button>
+                    <button type="submit" action="register" class='w-20 h-7 text-[10px] rounded border border-black mr-2'>Register</button>
+                    <button type="submit" action="login" class='btn'>Log in</button>
                     {% endif %}
                 </div>
             </form>
-
-		</nav>
-        <hr>
-
-        <nav class="ml-[150px] mt-[40px] w-[200px] h-[500px] border border-gray-800 rounded-2xl bg-gray-700">
-            <h4 class="pl-[40px] pt-[40px] text-1xl font-sans text-blue-500">Планы</h4>
-            <hr class='mx-3 my-2'>
-            {% if tasks != None %}
+            
+        </nav>
+        
+        <div class="flex">
+            <nav class="ml-[150px] mt-[40px] w-[200px] h-[500px] border border-gray-600 rounded-2xl bg-indigo-900">
+                <h4 class="pl-[40px] pt-[40px] text-1xl font-sans text-blue-500">Планы</h4>
+                <hr class='mx-3 my-2'>
                 <div class="inline-flex items-center gap-2 text-gray-400 rounded border border-blue-500 ml-7 my-3 px-3 ">
                     <img src="{% static 'project-management.png' %}" width="20"> 
                     {{ first_project }}
                 </div>
                 <div class="inline-flex items-center gap-2 text-gray-400 rounded border border-blue-500 ml-7 my-3 px-3 ">. . .</div>
-            {% endif %}
-            
-            <hr class='mx-3 my-2 bg-gray-600'>
-            <h4 class="pl-[40px] pt-[20px] text-1xl font-sans text-blue-500">Участники</h4>
-        </nav>
+                
+                <hr class='mx-3 my-2 bg-gray-600'>
+                <h4 class="pl-[40px] pt-[20px] text-1xl font-sans text-blue-500">Участники</h4>
+            </nav>
+        
+            <ul class="mt-[70px] ml-[40px]">
+                {% for project in projects %}
+                    <li class="flex flex-wrap w-auto h-auto bg-gray-900 rounded">    
+                        <a href="{% url 'core:kanban_template' project %}">
+                            <img src="{{ project.bg_image.url }}" class="rounded-t-md w-[150px] h-[70px] object-cover object-left-top">
+                            <span class="text-white text-4xl font-mono pt-[40px] pl-4">{{ project.name }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-        {% block content %}
+        {% block specified_content %}
         {% endblock %}
 
         </div>

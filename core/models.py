@@ -1,15 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 class Project(models.Model):
     name = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True, blank=True)
     bg_image = models.ImageField(upload_to="backgrounds/", blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.name:
             count = Project.objects.count() + 1
             self.name = f"Project{count}"
+        elif not self.slug:
+            self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.name}'
 
 class Taskgroup(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)

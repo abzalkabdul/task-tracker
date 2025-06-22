@@ -1,7 +1,8 @@
+import re
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from .models import Task, Taskgroup
+from .models import Task, Taskgroup, Project
 
 from .forms import CreateUserForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -45,8 +46,19 @@ def logout_page(request):
 
 def base(request):
     tasks = Task.objects.all()
-    first_project = Taskgroup.objects.first().project_name
+    if Project.objects.all():
+        first_project = Taskgroup.objects.first().project.name
+    else:
+        first_project = "Project"
+
+    projects = Project.objects.all()
     return render(request, 'base.html', {"tasks": tasks,
-                                         "first_project": first_project,})
+                                         "first_project": first_project,
+                                         "projects": projects})
+
+
+def kanban_template(request, project):
+    return render(request,'kanban_template.html', {})
+
 
 
