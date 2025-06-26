@@ -14,7 +14,7 @@ def register(request):
 
     if request.method == 'POST':
         action = request.POST.get("action")
-        if  action == 'register':
+        if action == 'register':
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 form.save()
@@ -27,7 +27,7 @@ def register(request):
 def login_page(request):
     form = AuthenticationForm()
 
-    if request.POST.get('action') == 'login':
+    if request.method=='POST' and request.POST.get('action') == 'login':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
@@ -39,9 +39,9 @@ def login_page(request):
     return render(request, 'login.html', {'form': form})
 
 def logout_page(request):
-    if request.POST.get("action") == 'logout':
+    if request.method == 'POST' and request.POST.get("action") == 'logout':
         logout(request)
-        return redirect('core')
+        return redirect('core:base')
 
 
 def base(request):

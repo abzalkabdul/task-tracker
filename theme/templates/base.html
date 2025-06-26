@@ -13,28 +13,38 @@
             <img src="{% static 'jira_icon.jpeg' %}" width='25' alt='jira_icon'>
             <span class='logo mx-3 text-bold text-white'>Jira</span>
             
-            <form method="POST" action="." class='form flex ml-30'>
-                {% csrf_token %}
+            <div class='flex ml-30'>
                 <input name="poisk" placeholder='Поиск' class='w-[800px] h-7 px-4 ml-10 border-blue-500 rounded border border-solid text-gray-200 bg-transparent'>
                 <button class='bg-blue-500 rounded w-25 h-7 text-[15px] ml-4 text-white'>+ Создать</button>
                 
                 <div class="flex ml-auto items-center">
                     {% if user.is_authenticated %}
-                    <span class='text-white ml-12 whitespace-nowrap'>
-                        👤 {{ user.username }}
-                    </span>
-                    <button type="submit" action="logout" class='w-20 h-7 text-[15px] ml-9 rounded border border-black bg-purple-900 text-white'>Log out</button>
+                        <form method="POST" action="{% url 'logout' %}" class='flex'>
+                            {% csrf_token %}
+                            <span class='text-white ml-12 mt-[5px] whitespace-nowrap'>
+                                👤 {{ user.username }}
+                            </span>
+                            <button type="submit" name="action" value="logout" class='w-20 h-7 text-[15px] ml-9 rounded-xl mt-[5px] border border-black bg-purple-900 text-white'>Log out</button>
+                        </form>
                     {% else %}
-                    <button type="submit" action="register" class='w-20 h-7 text-[10px] rounded border border-black mr-2'>Register</button>
-                    <button type="submit" action="login" class='btn'>Log in</button>
+                        <form method="POST" action="{% url 'register' %}">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <button type="submit" name="action" value="register" class='w-20 h-7 text-[15px] ml-9 mt-[5px] rounded-xl border border-black bg-white text-black'>Register</button>
+                        </form>
+                        <form method="POST" action="{% url 'login' %}">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <button type="submit" name="action" value="login" class='w-20 h-7 text-[15px] ml-9 mt-[5px] rounded-xl border border-black bg-purple-800 text-white'>Log in</button>
+                        </form>
                     {% endif %}
                 </div>
-            </form>
+            </div>
             
         </nav>
         
-        <div class="flex">
-            <nav class="ml-[150px] mt-[40px] w-[200px] h-[500px] border border-gray-600 rounded-2xl bg-indigo-900">
+        <div class="flex items-start">
+            <nav class="ml-[150px] mt-[40px] w-[200px] h-[500px] border border-gray-600 rounded-2xl bg-blue-900">
                 <h4 class="pl-[40px] pt-[40px] text-1xl font-sans text-blue-500">Планы</h4>
                 <hr class='mx-3 my-2'>
                 <div class="inline-flex items-center gap-2 text-gray-400 rounded border border-blue-500 ml-7 my-3 px-3 ">
@@ -47,16 +57,22 @@
                 <h4 class="pl-[40px] pt-[20px] text-1xl font-sans text-blue-500">Участники</h4>
             </nav>
         
-            <ul class="mt-[70px] ml-[40px]">
+            <ul class="grid grid-cols-3 gap-6 mt-[50px] ml-10">
                 {% for project in projects %}
-                    <li class="flex flex-wrap w-auto h-auto bg-gray-900 rounded">    
-                        <a href="{% url 'core:kanban_template' project %}">
-                            <img src="{{ project.bg_image.url }}" class="rounded-t-md w-[150px] h-[70px] object-cover object-left-top">
-                            <span class="text-white text-4xl font-mono pt-[40px] pl-4">{{ project.name }}</span>
+                    <li class="relative w-[250px] h-[120px] rounded-xl overflow-hidden shadow-md cursor-pointer">
+                        <a href="{% url 'core:kanban_template' project.slug %}">
+                            <!-- Фон -->
+                            <img src="{{ project.bg_image.url }}" class="absolute inset-0 w-full h-full object-cover" alt="">
+                            
+                            <!-- Полупрозрачный фильтр снизу -->
+                            <div class="absolute bottom-0 left-0 right-0 bg-blue-900 bg-opacity-60 px-4 py-2">
+                                <p class="text-white text-sm font-semibold">{{ project.name }}</p>
+                            </div>
                         </a>
                     </li>
                 {% endfor %}
             </ul>
+            
         </div>
 
         {% block specified_content %}
