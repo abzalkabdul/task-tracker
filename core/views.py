@@ -1,3 +1,4 @@
+from operator import ge
 import re
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -32,7 +33,7 @@ def login_page(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('core:base')
+            return redirect('core:main')
         else:
             messages.error(request, 'Invalid username or password')
 
@@ -43,22 +44,24 @@ def logout_page(request):
         logout(request)
         return redirect('core:base')
 
-
 def base(request):
-    tasks = Task.objects.all()
-    if Project.objects.all():
-        first_project = Taskgroup.objects.first().project.name
-    else:
-        first_project = "Project"
+    return render(request, 'base.html', {"first_project": get_first_project_name})
 
+def main(request):
     projects = Project.objects.all()
-    return render(request, 'base.html', {"tasks": tasks,
-                                         "first_project": first_project,
+    return render(request, 'main.html', {"first_project": get_first_project_name, 
                                          "projects": projects})
 
 
-def kanban_template(request, project):
-    return render(request,'kanban_template.html', {})
+def get_first_project_name():
+    if Project.objects.all():
+        return Taskgroup.objects.first().project.name
+    return "Project"
+
+def specified_project(request, slug):
+    project = Project.objects.get(slug=slug)
+    return render(request, 'specified_project.html', {"first_project": get_first_project_name,
+                                                      "project": project})
 
 
 

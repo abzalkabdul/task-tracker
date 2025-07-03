@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul class="grid grid-cols-3 gap-6 mt-[50px] ml-10">
+    {% for project in projects %}
+        <li class="relative w-[250px] h-[120px] rounded-xl overflow-hidden shadow-md cursor-pointer">
+            <a href="{% url 'core:specified_project' project.slug %}">
+                <!-- Фон -->
+                <img src="{{ project.bg_image.url }}" class="absolute inset-0 w-full h-full object-cover" alt="pg_bg_image">
+
+                <div class="absolute bottom-0 left-0 right-0 bg-blue-900 bg-opacity-60 px-4 py-2">
+                    <p class="text-white text-sm font-semibold">{{ project.name }}</p>
+                </div>
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

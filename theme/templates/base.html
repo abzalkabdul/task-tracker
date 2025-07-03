@@ -56,27 +56,11 @@
                 <hr class='mx-3 my-2 bg-gray-600'>
                 <h4 class="pl-[40px] pt-[20px] text-1xl font-sans text-blue-500">Участники</h4>
             </nav>
-        
-            <ul class="grid grid-cols-3 gap-6 mt-[50px] ml-10">
-                {% for project in projects %}
-                    <li class="relative w-[250px] h-[120px] rounded-xl overflow-hidden shadow-md cursor-pointer">
-                        <a href="{% url 'core:kanban_template' project.slug %}">
-                            <!-- Фон -->
-                            <img src="{{ project.bg_image.url }}" class="absolute inset-0 w-full h-full object-cover" alt="">
-                            
-                            <!-- Полупрозрачный фильтр снизу -->
-                            <div class="absolute bottom-0 left-0 right-0 bg-blue-900 bg-opacity-60 px-4 py-2">
-                                <p class="text-white text-sm font-semibold">{{ project.name }}</p>
-                            </div>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
+
+            {% block content %}
+            {% endblock %}
             
         </div>
-
-        {% block specified_content %}
-        {% endblock %}
 
         </div>
 	</body>
